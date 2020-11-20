@@ -14,8 +14,8 @@ function setGtinSSI(server){
 			}
 
 			const gtinData = JSON.parse(req.body);
-			const GtinResolver = require("../gtin-resolver");
-			const gtinSSI = GtinResolver.createGTIN_SSI(gtinData.dlDomain, gtinData.gtin, gtinData.batch, gtinData.expiration);
+			const GtinResolver = require("../../gtin-resolver");
+			const gtinSSI = GtinResolver.createGTIN_SSI(gtinData.dlDomain, gtinData.gtin, gtinData.batch);
 
 			const transaction = transactionManager.getTransaction(req.params.transactionId);
 			transaction.context.keySSI = gtinSSI;
