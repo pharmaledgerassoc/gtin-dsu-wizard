@@ -19,6 +19,7 @@ function setGtinSSI(server){
 
 			const transaction = transactionManager.getTransaction(req.params.transactionId);
 			transaction.context.keySSI = gtinSSI;
+			transaction.context.forceNewDSU = true;
 			transaction.context.options.useSSIAsIdentifier = true;
 
 			return callback(undefined, command);
