@@ -1,3 +1,6 @@
+const dsuWizzard = require("dsu-wizard")
+const GtinResolver = require("../../gtin-resolver");
+
 function setGtinSSI(server){
 	const dsu_wizard = require("dsu-wizard");
 	const commandRegistry = dsu_wizard.getCommandRegistry(server);
@@ -12,8 +15,8 @@ function setGtinSSI(server){
 			}
 
 			const gtinData = JSON.parse(req.body);
-			const GtinResolver = require("../../gtin-resolver");
-			const gtinSSI = GtinResolver.createGTIN_SSI(gtinData.dlDomain, gtinData.gtin, gtinData.batch);
+			const {dlDomain, bricksDomain, gtin, batch} = gtinData
+			const gtinSSI = GtinResolver.createGTIN_SSI(dlDomain, bricksDomain ? bricksDomain : dlDomain, gtin, batch);
 
 			const transaction = transactionManager.getTransaction(req.params.transactionId, (err, transaction)=>{
 				transaction.context.keySSI = gtinSSI.getIdentifier();
@@ -23,7 +26,7 @@ function setGtinSSI(server){
 					if(err){
 						return callback(err);
 					}
-					const command = require("dsu-wizard").getDummyCommand().create("setGtinSSI");
+					const command = dsuWizzard.getDummyCommand().create("setGtinSSI");
 					return callback(undefined, command);
 				});
 			});
